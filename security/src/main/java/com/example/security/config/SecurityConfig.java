@@ -1,5 +1,6 @@
 package com.example.security.config;
 
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -33,7 +36,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        SecurityFilterChain securityFilterChain = http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/public").permitAll()
@@ -43,6 +46,13 @@ public class SecurityConfig {
                 )
                 .httpBasic(withDefaults())
                 .build();
+
+        List<Filter> filters = securityFilterChain.getFilters();
+        System.out.println("Filter value is");
+        for(Filter filter: filters){
+            System.out.println(filter.toString());
+        }
+        return securityFilterChain;
     }
 
     @Bean
