@@ -43,6 +43,9 @@ public interface AuthenticationManager {
 - **Remember-Me**: Spring Security uses the **RememberMeAuthenticationFilter** to implement remember-me functionality. The RememberMeAuthenticationFilter allows users to be authenticated without having to enter their username and password every time they visit the application.
 - [spring security docs](https://docs.spring.io/spring-security/reference/servlet/architecture.html)
 - [form login architecture](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html)
+- [Internal working](https://riteshpanigrahi.hashnode.dev/spring-security-architecture-and-internal-workflow)
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1647611545607/aySdKZwVz.png?auto=compress,format&format=webp)
 
 ### Classes Implementing AuthenticationManager
 
@@ -76,8 +79,85 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
 These are just a few examples of classes that implement the `AuthenticationManager` interface in Spring Security. Depending on your specific requirements and authentication mechanisms, you can choose the appropriate implementation class or create custom implementations by extending the `AuthenticationManager` interface.
 
-
 #### Note:
 By default, Spring Security configures a single DaoAuthenticationProvider as the authentication provider in the ProviderManager. The DaoAuthenticationProvider works with a UserDetailsService to retrieve user details from a data source (such as a database) and performs authentication using the provided credentials.
+
+### Session management
+Once you have got an application that is authenticating requests, it is important to consider how that resulting 
+authentication will be persisted and restored on future requests.
+
+Commonly used options in session management.
+In Spring Boot Security, the `HttpSession` related configuration options provide different options for session management. Some of the commonly used options are:
+
+1. `sessionCreationPolicy`: This option determines when Spring Security should create a new session. It can have the following values:
+    - `IF_REQUIRED` (default): A new session is created if required (e.g., when authentication is required).
+    - `NEVER`: Spring Security will not create a new session but will use an existing session if available.
+    - `STATELESS`: Spring Security will not create or use a session, and each request will be treated as independent.
+
+2. `sessionFixation`: This option configures how Spring Security handles session fixation attacks. It can have the following values:
+    - `NONE` (default): No session fixation protection is applied.
+    - `CHANGE_SESSION_ID`: The session ID is changed after successful authentication.
+    - `MIGRATE_SESSION`: The session ID is changed and session attributes are migrated to the new session after successful authentication.
+    - `new Session`: 
+   
+```
+          http
+             .sessionManagement(
+                  session-> session
+                           .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+
+    To set five minutes for session expire
+    @Bean
+    public HttpSessionListener httpSessionListener() {
+        return new SessionListener();
+    }
+    
+    private static class SessionListener implements HttpSessionListener {
+    
+        @Override
+        public void sessionCreated(HttpSessionEvent event) {
+            HttpSession session = event.getSession();
+            session.setMaxInactiveInterval(300); // 5 minutes
+        }
+    
+        @Override
+        public void sessionDestroyed(HttpSessionEvent event) {
+            // Session destroyed event handling
+        }
+    
+    }
+```
+
+3. `invalidSessionUrl`: This option specifies the URL to redirect to when an invalid session is detected (e.g., session timeout or invalid session ID).
+
+4. `maximumSessions` and `maxSessionsPreventsLogin`: These options control the behavior when multiple sessions are detected for the same user. `maximumSessions` sets the maximum number of sessions allowed per user, and `maxSessionsPreventsLogin` determines whether to prevent login when the maximum number of sessions is reached.
+
+5. `expiredUrl`: This option specifies the URL to redirect to when a session has expired.
+
+6. `sessionConcurrency`: This option allows you to configure session concurrency control. It can have the following values:
+    - `CONCURRENT_SESSIONS` enables concurrent session control.
+    - `MAX_SESSIONS_PREVENTS_LOGIN` prevents login when the maximum number of sessions is reached.
+    - `NONE` disables session concurrency control.
+
+
+### how session cookies is stored in spring security ?
+In Spring Security, session cookies are typically stored in the **client's browser as HTTP cookies**. When a user logs in or establishes a session with the application, a session cookie is created and sent back to the client. The client then includes this session cookie in subsequent requests to the server to maintain the session.
+
+The session cookie contains a **unique session identifier** that allows the server to identify and associate the request with the correct session data. The server retrieves the session data associated with the session identifier stored in the cookie and uses it to maintain the user's session state.
+
+Spring Security provides various options for managing and storing session cookies. By default, **Spring Security uses an in-memory session management mechanism** where session data is stored on the server's memory. However, this is not suitable for distributed or clustered environments.
+
+To store session cookies in a more scalable and distributed manner, you can configure Spring Security to use external session stores such as **Redis, JDBC, or Hazelcast.** This allows session data to be stored outside the application server, making it accessible to multiple instances of the application.
+
+By leveraging external session stores, you can achieve features like session replication, session failover, and session sharing across multiple instances of the application, improving scalability, and fault tolerance.
+
+It's important to choose an appropriate session storage mechanism based on your application's requirements, scalability needs, and infrastructure setup.
+
+
+
+
+
+
 
 
