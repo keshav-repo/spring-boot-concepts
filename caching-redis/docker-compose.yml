@@ -1,0 +1,9 @@
+version: '2'
+services:
+  redis: 
+    image: redis:latest
+    environment:
+      - NAME=redis_local
+    ports:
+      - 7000:6379
+      
