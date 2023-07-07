@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "dba16f4d-d93f-42fa-a157-a5fdc6d89922",
+		"name": "REDIS-CACHING",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2601330"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9292/product/3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 3,\r\n    \"name\": \"OnePlus Nord CE 3 Lite 5G\",\r\n    \"qty\": 50,\r\n    \"price\": 20000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9292/product/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9292",
+					"path": [
+						"product",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9292/product/3",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9292/product/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9292",
+					"path": [
+						"product",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9292/product/3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9292/product/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9292",
+					"path": [
+						"product",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9292/product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9292/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9292",
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9292/product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": 2,\r\n    \"name\": \"Tecno Spark 10 5G\",\r\n    \"qty\": 100,\r\n    \"price\": 14999\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9292/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9292",
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -72,3 +72,7 @@ public class LoadBalancerConfiguration {
 }
 ```
 
+### How to configure eureka netflix in docker/kubernates 
+
+
+
