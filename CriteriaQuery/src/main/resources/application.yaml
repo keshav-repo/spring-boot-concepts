@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: SA
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  h2:
+    console:
+      enabled: true
+logging:
+  pattern:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
