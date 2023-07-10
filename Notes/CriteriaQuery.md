@@ -99,7 +99,8 @@ Both QueryDSL and JOOQ have their own strengths and offer a more concise and rea
 
 Consider evaluating the documentation, features, community support, and integration with your existing stack to determine which alternative suits your needs best. It's also recommended to experiment with both options and consider the learning curve and developer experience to make an informed decision for your specific use case.
 
-
+### Resource
+- http://querydsl.com/static/querydsl/latest/reference/html/
 
 
 
