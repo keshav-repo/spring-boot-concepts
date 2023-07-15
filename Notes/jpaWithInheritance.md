@@ -137,6 +137,29 @@ With this configuration, the attributes of the `Address` class (`street`, `city`
 
 Using `@Embedded`, you can encapsulate complex or reusable components into separate classes and include them as embedded objects within your JPA entities, improving code organization and reusability.
 
+### using @OneToOne, @OneToMany causes hitting db many time. is there any solution for same ( N+1 issue)
+When using `@OneToOne` or `@OneToMany` relationships in an object-relational mapping (ORM) framework like Hibernate, it can lead to the "N+1" problem, where additional database queries are executed to fetch associated entities. This can result in performance issues and increased database hits.
+
+To mitigate the N+1 problem and minimize database hits, you can consider the following solutions:
+
+1. **Eager Fetching**: By default, Hibernate performs lazy fetching, where associated entities are loaded on-demand when accessed. However, you can use eager fetching to load the associated entities upfront using the `fetch` attribute in the relationship annotation. For example, `@OneToMany(fetch = FetchType.EAGER)`.
+
+2. **Join Fetching**: Utilize join fetching to fetch associated entities in a single query, reducing the number of database hits. This can be achieved using the `join fetch` keyword in JPQL or HQL queries or by specifying the `fetch = FetchType.JOIN` attribute in the relationship annotation.
+
+3. **Batch Fetching**: Enable batch fetching to retrieve associated entities in batches rather than individually. This can be achieved by configuring batch fetching settings in Hibernate, such as the `@BatchSize` annotation or the `hibernate.batch_fetch_size` configuration property.
+
+4. **DTO Projections**: Consider using DTO (Data Transfer Object) projections to retrieve only the required data from the database instead of full entity objects. This allows you to fetch specific fields or a subset of data, reducing the amount of data transferred from the database and improving performance.
+
+5. **Caching**: Implement caching mechanisms, such as the second-level cache provided by Hibernate, to cache frequently accessed entities. This can help reduce database hits by serving the data directly from the cache when available.
+
+6. **Custom Queries**: Instead of relying solely on ORM mappings, write custom queries using JPQL or SQL to fetch the required data in a more optimized manner. This gives you more control over the fetching strategy and can help reduce unnecessary database hits.
+
+It's important to note that each solution has its trade-offs, and the most suitable approach depends on your specific use case and performance requirements. Analyze the performance impact of each solution and consider factors such as data size, access patterns, and the overall system architecture to choose the most appropriate approach for minimizing database hits in your application.
+
+### N+1 problem solution 
+- [appmake](https://appmap.io/blog/2021/10/04/detecting_n_plus_one_for_spring_applications/#:~:text=3%3A00%20The%20easiest%20way,EAGER)%20%40Fetch(FetchMode.)
+- 
+
 
 
 
