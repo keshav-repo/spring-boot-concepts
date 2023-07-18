@@ -1,0 +1,10 @@
+server:
+  port: 8500
+
+spring:
+  application:
+    name: producer-service
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9093, localhost:9094
+    template:
+      default-topic: orders-placed

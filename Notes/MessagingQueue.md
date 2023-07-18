@@ -25,6 +25,20 @@ Consider your specific requirements, the level of control and abstraction you de
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 
 .\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Create topic
+.\bin\windows\kafka-topics.bat --create --topic order-event --bootstrap-server localhost:9092 --replication-factor 3 --partitions 3
+
+Consume from a particular topic 
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic order-event --partition 1  --from-beginning
+
+Delete a topic
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic orders-placed
+
+Consume message from beginning
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic orders-placed --from-beginning
+
+
 ```
 
 #### Topic 
@@ -134,6 +148,27 @@ Here are the key uses and benefits of consumer groups in Kafka:
 6. **Exactly-Once Semantics**: Consumer groups can work in conjunction with the transactional capabilities of Kafka to achieve exactly-once semantics. By enabling idempotent and transactional producers, along with appropriate consumer configurations, Kafka ensures that messages are processed exactly once even in the presence of failures or retries.
 
 Consumer groups are an essential component of building scalable and fault-tolerant systems with Apache Kafka. They provide a mechanism for parallelizing message consumption, load distribution, fault tolerance, and preserving message order within partitions. By leveraging consumer groups, applications can efficiently consume and process high volumes of data from Kafka topics.
+
+### How to send message to a particular partition in a kafka 
+Using ProducerRecord
+```
+public ProducerRecord(String topic, Integer partition, K key, V value) {
+}
+```
+
+### What is the difference between kafka-streams and apache kafka 
+Kafka Streams and Apache Kafka are related but serve different purposes in the Apache Kafka ecosystem.
+
+1. Apache Kafka:
+   Apache Kafka is a distributed streaming platform that provides a messaging system for building real-time data pipelines and streaming applications. It is designed to handle high-throughput, fault-tolerant, and scalable data streaming. Kafka acts as a distributed commit log, storing and managing streams of records in a fault-tolerant manner. It provides publish-subscribe messaging, message retention, fault tolerance, and horizontal scalability.
+
+2. Kafka Streams:
+   Kafka Streams is a client library that is part of the Apache Kafka project. It allows you to build real-time stream processing applications that consume, process, and produce data from Kafka topics. Kafka Streams provides a high-level stream processing DSL (Domain-Specific Language) that simplifies the development of stream processing applications. It integrates seamlessly with Apache Kafka and provides fault-tolerance, scalability, and stateful stream processing capabilities.
+
+In summary, Apache Kafka is the underlying distributed messaging platform that handles the storage, replication, and distribution of streams of records. It provides durable, fault-tolerant, and scalable event streaming. On the other hand, Kafka Streams is a client library that enables developers to process and analyze the data streams in real-time using the Kafka infrastructure. It allows for building stateful stream processing applications using a high-level DSL.
+
+Kafka Streams can be seen as a higher-level abstraction built on top of Apache Kafka, providing a way to write stream processing applications using the Kafka ecosystem. It simplifies the development of stream processing logic by providing a familiar programming model and integrating seamlessly with the Kafka messaging system.
+
 
 
 
