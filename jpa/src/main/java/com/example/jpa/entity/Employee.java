@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
-
     @Embedded
     private Address address;
 

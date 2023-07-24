@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "employee")
@@ -20,7 +23,8 @@ public class Employee {
 
     private String name;
 
-//    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
-//    private Address address;
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    private Address address;
 
 }

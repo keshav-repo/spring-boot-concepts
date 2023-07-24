@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "address")
@@ -22,9 +24,10 @@ public class Address {
     private String city;
     private String country;
 
-//    @JsonIgnore
-//    @OneToOne
-//    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id", insertable = false, updatable = false)
-//    private Employee employee;
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private Employee employee;
 
 }

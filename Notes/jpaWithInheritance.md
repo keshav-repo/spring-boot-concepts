@@ -160,6 +160,34 @@ It's important to note that each solution has its trade-offs, and the most suita
 - [appmake](https://appmap.io/blog/2021/10/04/detecting_n_plus_one_for_spring_applications/#:~:text=3%3A00%20The%20easiest%20way,EAGER)%20%40Fetch(FetchMode.)
 - 
 
+## How to set isolation in jpa ? 
+In JPA (Java Persistence API), you can set the isolation level for a transaction using the `@Transactional` annotation along with the `isolation` attribute. Here's how you can do it:
+
+1. Import the necessary classes:
+```java
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+```
+
+2. Annotate your method with `@Transactional` and set the `isolation` attribute to the desired isolation level:
+```java
+@Transactional(isolation = Isolation.READ_COMMITTED)
+public void yourMethod() {
+    // Your code here
+}
+```
+
+There are different isolation levels you can choose from in JPA, such as:
+
+- `Isolation.DEFAULT`: The default isolation level of the underlying database.
+- `Isolation.READ_UNCOMMITTED`: Allows a transaction to read data modified by other transactions that are not yet committed.
+- `Isolation.READ_COMMITTED`: Allows a transaction to read only committed data and not read uncommitted changes made by other transactions.
+- `Isolation.REPEATABLE_READ`: Allows a transaction to read the same data consistently throughout the transaction, preventing other transactions from modifying it.
+- `Isolation.SERIALIZABLE`: The highest isolation level, where each transaction is executed sequentially, preventing concurrent access to data.
+
+Choose the appropriate isolation level based on your application's requirements for data consistency and concurrency control.
+
+
 
 
 
