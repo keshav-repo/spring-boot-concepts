@@ -21,9 +21,15 @@ spring:
     bootstrap-servers: localhost:9092,localhost:9093, localhost:9094
     template:
       default-topic: orders-placed
+    consumer:
+      group-id: order-consumer-group
+      enable-auto-commit: true
 
 logging:
   pattern:
   level:
     org.hibernate.orm.jdbc.bind: trace
+
+
+
 

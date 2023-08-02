@@ -27,7 +27,7 @@ Consider your specific requirements, the level of control and abstraction you de
 .\bin\windows\kafka-server-start.bat .\config\server.properties
 
 Create topic
-.\bin\windows\kafka-topics.bat --create --topic order-event --bootstrap-server localhost:9092 --replication-factor 3 --partitions 3
+.\bin\windows\kafka-topics.bat --create --topic orders-placed --bootstrap-server localhost:9092 --replication-factor 2 --partitions 3
 
 Consume from a particular topic 
 .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic order-event --partition 1  --from-beginning
@@ -38,8 +38,16 @@ Delete a topic
 Consume message from beginning
 .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic orders-placed --from-beginning
 
+Describe topic
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic orders-placed
+
 
 ```
+
+
+## Note
+- Keep in mind that the number of partitions in the Kafka topic should be greater than or equal to the number of consumers in the same consumer group to ensure efficient load balancing.
+- 
 
 #### Topic 
 In Apache Kafka, a topic is a category or feed name to which messages are published. It represents a specific stream of data or a subject under which messages are organized. Topics in Kafka are similar to a table in a database or a folder in a file system.

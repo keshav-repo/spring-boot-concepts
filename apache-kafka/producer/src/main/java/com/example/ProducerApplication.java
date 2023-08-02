@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class ProducerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		produceOrderEvent();
+		//produceOrderEvent();
 	}
 
 
@@ -38,7 +36,6 @@ public class ProducerApplication implements CommandLineRunner {
 		produceOrderEvent();
 		return "SUCCESS";
 	}
-
 
 	void produceOrderEvent(){
 		List<ProductPayload> productPayloadList = new ArrayList<>();
@@ -52,5 +49,11 @@ public class ProducerApplication implements CommandLineRunner {
 				.productPurchased(productPayloadList)
 				.build();
 		orderService.sendOrder(orderPlacedEvent);
+	}
+
+	@PostMapping
+	public String customOrderEvent(@RequestBody OrderPlacedEvent orderPlacedEvent){
+		orderService.sendOrder(orderPlacedEvent);
+		return "SUCCESS";
 	}
 }
