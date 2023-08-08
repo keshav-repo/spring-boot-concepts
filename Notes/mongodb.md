@@ -76,6 +76,13 @@ script result
 }
 ```
 
+## Starting mongodb locally 
+mongod
+```javascript
+1. Check the size of document in db
+bsonsize(db.groceryitems.findOne( {  _id: ObjectId("64ca948bf9b3276c0fad843a") } ) )
+2. 
+```
 
 
 

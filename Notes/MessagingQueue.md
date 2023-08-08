@@ -41,6 +41,8 @@ Consume message from beginning
 Describe topic
 .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic orders-placed
 
+List all topics 
+.\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
 
 ```
 
@@ -189,6 +191,6 @@ Kafka Streams can be seen as a higher-level abstraction built on top of Apache K
 
 References
 - https://www.interviewbit.com/kafka-interview-questions/#kafka-features
-- 
+- [Spring cloud documentation](https://docs.spring.io/spring-cloud/docs/current/reference/html/)
 
 
