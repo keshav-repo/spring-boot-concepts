@@ -58,6 +58,7 @@ public class OrderService {
         try{
           SendResult<String, String> result = completableFuture.get(10, TimeUnit.SECONDS);
             System.out.println("After sending the event");
+
         }catch (InterruptedException | ExecutionException | TimeoutException exception){
             log.info(exception.getMessage());
             exception.printStackTrace();

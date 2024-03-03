@@ -17,9 +17,10 @@ public class KafkaProducerExample {
         // Create a Kafka producer
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
-        for (int i = 1; i < 100; i++) {
+        int recrodCount = 1_000_000;
+        for (int i = 1; i < recrodCount; i++) {
             // Message details
-            String topic = "order-event";
+            String topic = "orders";
 
             // Create a ProducerRecord with a specific partition
             int partition = (i % 3); // specify the desired partition

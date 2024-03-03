@@ -30,7 +30,6 @@ public class ProducerApplication implements CommandLineRunner {
 		//produceOrderEvent();
 	}
 
-
 	@GetMapping
 	public String emitOrderEvent(){
 		produceOrderEvent();
