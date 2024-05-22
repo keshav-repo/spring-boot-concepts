@@ -20,7 +20,7 @@ public class CountryEndpoint {
 		this.countryRepository = countryRepository;
 	}
 
-	@PayloadRoot(namespac	e = NAMESPACE_URI, localPart = "getCountryRequest")
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
 	@ResponsePayload
 	public GetCountryResponse getCountry(@RequestPayload GetCountryRequest request) {
 		GetCountryResponse response = new GetCountryResponse();
