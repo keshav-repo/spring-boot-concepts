@@ -2,7 +2,10 @@ package com.example.employee.controller;
 
 import com.example.employee.constants.ErrorCode;
 import com.example.employee.dto.EmployeeReqDto;
+import com.example.employee.dto.EmployeeResDto;
 import com.example.employee.dto.ValidationError;
+import com.example.employee.exception.DbException;
+import com.example.employee.model.Employee;
 import com.example.employee.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -33,5 +33,10 @@ public class EmployeeController {
 
         employeeService.saveEmployee(employeeReqDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @GetMapping
+    public ResponseEntity<?> fetchEmployee(@RequestParam("empId") String empId) throws Exception {
+        EmployeeResDto employee = employeeService.fetchEmployee(Integer.parseInt(empId));
+        return ResponseEntity.ok(employee);
     }
 }

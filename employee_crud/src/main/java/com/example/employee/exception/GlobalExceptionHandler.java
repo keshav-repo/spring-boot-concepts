@@ -18,10 +18,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(error.getCode(), error.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({EmployeeNotFound.class})
+    public ResponseEntity<ErrorResponse> notFound(EmployeeNotFound error, WebRequest request) {
+        return new ResponseEntity<>(new ErrorResponse(error.getCode(), error.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorResponse> handleConflictException(Exception error, WebRequest request) {
         error.printStackTrace();
         log.error(error.getMessage());
-        return new ResponseEntity<>(new ErrorResponse(ErrorCode.TEMP_ERR.getCode(), ErrorCode.TEMP_ERR.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(ErrorCode.TEMP_ERR.getCode(), ErrorCode.TEMP_ERR.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

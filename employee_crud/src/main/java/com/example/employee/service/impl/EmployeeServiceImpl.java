@@ -4,6 +4,7 @@ import com.example.employee.constants.ErrorCode;
 import com.example.employee.dto.EmployeeReqDto;
 import com.example.employee.dto.EmployeeResDto;
 import com.example.employee.exception.DbException;
+import com.example.employee.exception.EmployeeNotFound;
 import com.example.employee.model.Employee;
 import com.example.employee.repo.EmployeeRepo;
 import com.example.employee.service.EmployeeService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,13 +34,34 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepo.save(employee);
         } catch (Exception exception) {
             log.error("error saving employee information");
-            throw new DbException(ErrorCode.SAVE_EMPLOYEE_ERR.getMessage(), ErrorCode.SAVE_EMPLOYEE_ERR.getCode() );
+            throw new DbException(ErrorCode.SAVE_EMPLOYEE_ERR.getMessage(), ErrorCode.SAVE_EMPLOYEE_ERR.getCode());
         }
     }
 
     @Override
     public EmployeeResDto fetchEmployee(int empId) {
-        return null;
+        try {
+            Optional<Employee> opTemployee = employeeRepo.findById(empId);
+            if (opTemployee.isPresent()) {
+                Employee employee = opTemployee.get();
+                return EmployeeResDto.builder()
+                        .empId(employee.getEmpId())
+                        .name(employee.getName())
+                        .role(employee.getRole())
+                        .address(employee.getAddress())
+                        .department(employee.getDepartment())
+                        .salary(employee.getSalary())
+                        .build();
+            } else {
+                throw new EmployeeNotFound(ErrorCode.EMPLOYEE_NOTFOUND.getMessage(), ErrorCode.EMPLOYEE_NOTFOUND.getCode());
+            }
+        } catch (Exception e) {
+            if (e instanceof EmployeeNotFound)
+                throw e;
+            log.error("error fetching employee information with empId {}", empId);
+            e.printStackTrace();
+            throw new DbException(ErrorCode.SAVE_EMPLOYEE_ERR.getMessage(), ErrorCode.SAVE_EMPLOYEE_ERR.getCode());
+        }
     }
 
     @Override
