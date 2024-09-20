@@ -101,6 +101,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeRepo.deleteById(empId);
             }
         } catch (Exception e) {
+            if (e instanceof EmployeeNotFound)
+                throw e;
             log.error("error deleting employee");
             e.printStackTrace();
             throw new DbException(ErrorCode.DELETE_EMPLOYEE_ERR.getMessage(), ErrorCode.DELETE_EMPLOYEE_ERR.getCode());

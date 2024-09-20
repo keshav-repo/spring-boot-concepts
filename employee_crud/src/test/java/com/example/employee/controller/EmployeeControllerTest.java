@@ -13,14 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerTest {
@@ -106,5 +103,32 @@ public class EmployeeControllerTest {
 
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
         assertEquals("ERROR03", jsonNode.get("errorCode").asText());
+    }
+
+    @Test
+    public void deleteEmployee_success() {
+        doNothing().when(employeeService).deleteEmployee(any(Integer.class));
+        ResponseEntity<Void> response = restTemplate.exchange(createURLWithPort("/api/employee") + "?empId=20",
+                HttpMethod.DELETE, null, Void.class
+        );
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+    }
+
+    @Test
+    public void deleteEmployee_employee_not_found() {
+       doThrow(new EmployeeNotFound("", "")).when(employeeService).deleteEmployee(any(Integer.class));
+        ResponseEntity<Void> response = restTemplate.exchange(createURLWithPort("/api/employee") + "?empId=20",
+                HttpMethod.DELETE, null, Void.class
+        );
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void deleteEmployee_any_other_error() {
+        doThrow(new RuntimeException()).when(employeeService).deleteEmployee(any(Integer.class));
+        ResponseEntity<Void> response = restTemplate.exchange(createURLWithPort("/api/employee") + "?empId=20",
+                HttpMethod.DELETE, null, Void.class
+        );
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }
