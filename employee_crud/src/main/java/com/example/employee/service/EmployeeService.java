@@ -7,6 +7,7 @@ import java.util.List;
 public interface EmployeeService {
     public void saveEmployee(EmployeeReqDto employeeResDto);
     public EmployeeResDto fetchEmployee(int empId);
-    public List<EmployeeResDto> fetchAllEmployee();
+
+    public EmployeeResDto updateEmployee(EmployeeReqDto employeeResDto);
     public void deleteEmployee(int empId);
 }

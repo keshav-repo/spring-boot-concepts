@@ -3,7 +3,6 @@ package com.example.employee.controller;
 import com.example.employee.dto.EmployeeReqDto;
 import com.example.employee.dto.EmployeeResDto;
 import com.example.employee.exception.EmployeeNotFound;
-import com.example.employee.model.Employee;
 import com.example.employee.service.EmployeeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

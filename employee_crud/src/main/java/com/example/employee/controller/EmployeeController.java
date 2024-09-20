@@ -4,8 +4,6 @@ import com.example.employee.constants.ErrorCode;
 import com.example.employee.dto.EmployeeReqDto;
 import com.example.employee.dto.EmployeeResDto;
 import com.example.employee.dto.ValidationError;
-import com.example.employee.exception.DbException;
-import com.example.employee.model.Employee;
 import com.example.employee.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +32,34 @@ public class EmployeeController {
         employeeService.saveEmployee(employeeReqDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     @GetMapping
-    public ResponseEntity<?> fetchEmployee(@RequestParam("empId") String empId) throws Exception {
+    public ResponseEntity<EmployeeResDto> fetchEmployee(@RequestParam("empId") String empId) throws Exception {
         EmployeeResDto employee = employeeService.fetchEmployee(Integer.parseInt(empId));
         return ResponseEntity.ok(employee);
+    }
+
+    @PutMapping
+    public ResponseEntity<EmployeeResDto> updateEmployee(@RequestBody @Valid EmployeeReqDto employeeReqDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().get(0);
+            throw new ValidationError(objectError.getDefaultMessage(), ErrorCode.EMPLOYEE_INPUT_VALIDATION.getCode());
+        }
+        try {
+            EmployeeResDto employeeResDto = employeeService.updateEmployee(employeeReqDto);
+            return ResponseEntity.ok(employeeResDto);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteEmployee(@RequestParam("empId") String empId) {
+        try {
+            employeeService.deleteEmployee(Integer.parseInt(empId));
+            return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class EmployeeReqDto {
+    private int empId;
 
     @NotNull(message="enter a valid first name")
     @NotBlank(message="enter a valid first name")

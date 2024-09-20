@@ -65,12 +65,45 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResDto> fetchAllEmployee() {
-        return null;
+    public EmployeeResDto updateEmployee(EmployeeReqDto employeeResDto) {
+        Employee employee = Employee.builder()
+                .empId(employeeResDto.getEmpId())
+                .name(employeeResDto.getName())
+                .role(employeeResDto.getRole())
+                .department(employeeResDto.getDepartment())
+                .address(employeeResDto.getAddress())
+                .salary(employeeResDto.getSalary())
+                .build();
+        try {
+            Employee employeeUpdated = employeeRepo.save(employee);
+            return EmployeeResDto.builder()
+                    .empId(employeeUpdated.getEmpId())
+                    .name(employeeUpdated.getName())
+                    .role(employeeUpdated.getRole())
+                    .department(employeeUpdated.getDepartment())
+                    .address(employeeUpdated.getAddress())
+                    .salary(employee.getSalary())
+                    .build();
+        } catch (Exception exception) {
+            log.error("error saving employee information");
+            exception.printStackTrace();
+            throw new DbException(ErrorCode.SAVE_EMPLOYEE_ERR.getMessage(), ErrorCode.SAVE_EMPLOYEE_ERR.getCode());
+        }
     }
 
     @Override
     public void deleteEmployee(int empId) {
-
+        try {
+            Optional<Employee> optionalEmployee = employeeRepo.findById(empId);
+            if(!optionalEmployee.isPresent()){
+                throw new EmployeeNotFound(ErrorCode.EMPLOYEE_NOTFOUND.getMessage(), ErrorCode.EMPLOYEE_NOTFOUND.getCode());
+            }else{
+                employeeRepo.deleteById(empId);
+            }
+        } catch (Exception e) {
+            log.error("error deleting employee");
+            e.printStackTrace();
+            throw new DbException(ErrorCode.DELETE_EMPLOYEE_ERR.getMessage(), ErrorCode.DELETE_EMPLOYEE_ERR.getCode());
+        }
     }
 }
