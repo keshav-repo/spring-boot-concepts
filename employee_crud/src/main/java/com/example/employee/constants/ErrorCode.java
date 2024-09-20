@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     SAVE_EMPLOYEE_ERR("ERROR01", "Db error saving employee information"),
-    EMPLOYEE_INPUT_VALIDATION("ERROR02", "Bad request, check input");
+    EMPLOYEE_INPUT_VALIDATION("ERROR02", "Bad request, check input"),
+    TEMP_ERR("ERROR03", "Some temporary error");
 
     private final String code;
     private final String message;

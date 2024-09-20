@@ -1,5 +1,6 @@
 package com.example.employee.exception;
 
+import com.example.employee.constants.ErrorCode;
 import com.example.employee.dto.ValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,5 +16,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ValidationError.class})
     public ResponseEntity<ErrorResponse> handleConflictException(ValidationError error, WebRequest request) {
         return new ResponseEntity<>(new ErrorResponse(error.getCode(), error.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<ErrorResponse> handleConflictException(Exception error, WebRequest request) {
+        error.printStackTrace();
+        log.error(error.getMessage());
+        return new ResponseEntity<>(new ErrorResponse(ErrorCode.TEMP_ERR.getCode(), ErrorCode.TEMP_ERR.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
