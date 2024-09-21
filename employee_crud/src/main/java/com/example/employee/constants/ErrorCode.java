@@ -11,7 +11,8 @@ public enum ErrorCode {
 
     TEMP_ERR("ERROR03", "Some temporary error"),
     EMPLOYEE_NOTFOUND("ERROR04", "Employee not found"),
-    DELETE_EMPLOYEE_ERR("ERROR05", "Error deleting employee");
+    DELETE_EMPLOYEE_ERR("ERROR05", "Error deleting employee"),
+    FETCH_EMPLOYEE_ERR("ERROR06", "Error fetching employee");
 
     private final String code;
     private final String message;

@@ -10,10 +10,13 @@ import com.example.employee.repo.EmployeeRepo;
 import com.example.employee.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -65,6 +68,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeResDto> fetchAllEmployee(int page, int size) {
+        try {
+            // since page number is 0 based, so decreasing it
+            PageRequest pageRequest =  PageRequest.of(page-1, size);
+            return employeeRepo.findAll(pageRequest).stream()
+                    .map(employee -> EmployeeResDto
+                            .builder().name(employee.getName())
+                            .role(employee.getRole())
+                            .department(employee.getDepartment())
+                            .salary(employee.getSalary())
+                            .address(employee.getAddress())
+                            .empId(employee.getEmpId()).build()
+                    ).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("error find all employee {}", e.getMessage());
+            throw new DbException(ErrorCode.FETCH_EMPLOYEE_ERR.getMessage(), ErrorCode.FETCH_EMPLOYEE_ERR.getCode());
+        }
+    }
+
+    @Override
     public EmployeeResDto updateEmployee(EmployeeReqDto employeeResDto) {
         Employee employee = Employee.builder()
                 .empId(employeeResDto.getEmpId())
@@ -95,9 +118,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(int empId) {
         try {
             Optional<Employee> optionalEmployee = employeeRepo.findById(empId);
-            if(!optionalEmployee.isPresent()){
+            if (!optionalEmployee.isPresent()) {
                 throw new EmployeeNotFound(ErrorCode.EMPLOYEE_NOTFOUND.getMessage(), ErrorCode.EMPLOYEE_NOTFOUND.getCode());
-            }else{
+            } else {
                 employeeRepo.deleteById(empId);
             }
         } catch (Exception e) {

@@ -11,8 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,14 +60,24 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void fetchEmployee_any_error(){
+    public void fetchEmployee_any_error() {
         when(employeeRepo.findById(any(Integer.class))).thenThrow(new RuntimeException());
-        assertThrows(DbException.class, ()->employeeService.fetchEmployee(1));
+        assertThrows(DbException.class, () -> employeeService.fetchEmployee(1));
     }
+
     @Test
-    public void deleteEmployee_success(){
+    public void deleteEmployee_success() {
         Employee employee = Employee.builder().name("some name").build();
         when(employeeRepo.findById(any(Integer.class))).thenReturn(Optional.of(employee));
-        assertDoesNotThrow(()->employeeService.deleteEmployee(1));
+        assertDoesNotThrow(() -> employeeService.deleteEmployee(1));
+    }
+
+    @Test
+    public void fetchAllEmployee_test() {
+        when(employeeRepo.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
+                Employee.builder().name("name1").build(), Employee.builder().name("name2").build()
+        )));
+        List<EmployeeResDto> employeeResDtos =  employeeService.fetchAllEmployee(1, 2);
+        assertEquals(2, employeeResDtos.size());
     }
 }

@@ -10,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -34,9 +36,17 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<EmployeeResDto> fetchEmployee(@RequestParam("empId") String empId) throws Exception {
-        EmployeeResDto employee = employeeService.fetchEmployee(Integer.parseInt(empId));
-        return ResponseEntity.ok(employee);
+    public ResponseEntity<?> fetchEmployee(@RequestParam(value = "empId",  required = false) String empId,
+                                           @RequestParam(value = "page" , defaultValue = "0", required = false) int page,
+                                           @RequestParam(value = "size", defaultValue = "10", required = false ) int size
+                                           ) throws Exception {
+        if(StringUtils.hasLength(empId)){
+            EmployeeResDto employee = employeeService.fetchEmployee(Integer.parseInt(empId));
+            return ResponseEntity.ok(employee);
+        }else{
+            List<EmployeeResDto> employees = employeeService.fetchAllEmployee(page, size);
+            return ResponseEntity.ok(employees);
+        }
     }
 
     @PutMapping
