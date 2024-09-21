@@ -1,28 +1,29 @@
+version: '3.8'
 services:
-  mysqldb:
-    image: "mysql:8.0"
-    restart: always
+  mysql-server:
+    image: mysql:latest
+    container_name: mysql-server
+    environment:
+      - MYSQL_DATABASE=employee
+      - MYSQL_ROOT_PASSWORD=secret@123
     ports:
-      - 3300:3306
+      - "3300:3306"
+    restart: always
     networks:
       - internal-net
-    environment:
-      MYSQL_DATABASE: employee
-      MYSQL_USER: emp1
-      MYSQL_PASSWORD: secret@123
-      MYSQL_ROOT_PASSWORD: secret@123
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD}" ]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
   backend:
     build:
       context: .
     environment:
       NODE_ENV: dev
     depends_on:
-      mysqldb:
+      mysql-server:
         condition: service_healthy
     networks:
       - internal-net
@@ -31,33 +32,3 @@ services:
 networks:
   internal-net:
     driver: bridge
-
-
-#services:
-#  mysqldb:
-#    image: "mysql:8.0"
-#    restart: always
-#    ports:
-#      - 3300:3306
-#    networks:
-#      - internal-net
-#    environment:
-#      MYSQL_DATABASE: employee
-#      MYSQL_USER: root
-#      MYSQL_PASSWORD: secret@123
-#      MYSQL_ROOT_PASSWORD: secret@123
-#  backend:
-#    build:
-#      context: ./
-#    environment:
-#      NODE_ENV: dev
-#    depends_on:
-#      mysqldb:
-#        condition: service_healthy
-#    networks:
-#      - internal-net
-#    ports:
-#      - 8080:8080
-#networks:
-#  internal-net:
-#    driver: bridge
