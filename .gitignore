@@ -3,6 +3,5 @@ queryDsl
 
 spring-batch/rest-api/.mvn/wrapper/maven-wrapper.jar
 spring-batch/rest-api/.mvn/wrapper/maven-wrapper.jar
-*.properties
 *.jar
 *.jar
