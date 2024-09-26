@@ -43,7 +43,6 @@ public class KafkaConsumerExample {
 
             OrderConsumer orderConsumer =  new OrderConsumer(properties, clientId);
 
-
             executor.submit(orderConsumer);
         }
 

@@ -21,8 +21,6 @@ public class OrderConsumer implements Runnable{
         consumer.subscribe(Collections.singletonList("orders"));
         // consumer.seekToBeginning(consumer.assignment());
 
-
-
         try {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
