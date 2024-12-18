@@ -10,7 +10,8 @@ import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 public class OrderProducer {
-    public static void main(String[] args) {
+    public static void start() {
+
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9094,localhost:9093");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -33,9 +34,11 @@ public class OrderProducer {
         ObjectMapper objectMapper = new ObjectMapper();
 
         int recrodCount = 1_000;
-        for (int i = 1; i < recrodCount; i++) {
+
+        for (int i = 1; true ; i++) {
+
             // Message details
-            String topic = "order2";
+            String topic = "order";
 
             // Create a ProducerRecord with a specific partition
             int partition = (i % 3); // specify the desired partition
@@ -71,7 +74,7 @@ public class OrderProducer {
         }
 
         // Flush and close the producer
-        producer.flush();
-        producer.close();
+       // producer.flush();
+       // producer.close();
     }
 }

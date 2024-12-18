@@ -8,10 +8,15 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 
 public class OrderConsume {
 
-    public static void main(String[] args) {
+    public static void start() {
+
+        List<String> list = new CopyOnWriteArrayList<>();
+
         // Set up consumer properties
         Properties properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
@@ -47,8 +52,11 @@ public class OrderConsume {
                                     ", Topic: " + record.topic() +
                                     ", Partition: " + record.partition() +
                                     ", Offset: " + record.offset());
+
+                            list.add(record.value());
                         }
                         consumer.commitAsync(); // or .commitSync()
+
                     }
                 }catch (Exception exception){
                     System.out.println("some exception "+ exception.getLocalizedMessage());

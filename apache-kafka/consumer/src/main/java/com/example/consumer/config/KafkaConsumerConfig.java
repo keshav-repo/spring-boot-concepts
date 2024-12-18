@@ -62,12 +62,10 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
 
       //  props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-
         DefaultKafkaConsumerFactory<String, OrderPlacedEvent> consumerFactory = new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
                 new JsonDeserializer<>(OrderPlacedEvent.class, false));
 
- //       consumerFactory.addListener(new ConsumerListnerCustom());
-
+     // consumerFactory.addListener(new ConsumerListnerCustom());
         return consumerFactory;
     }
 
