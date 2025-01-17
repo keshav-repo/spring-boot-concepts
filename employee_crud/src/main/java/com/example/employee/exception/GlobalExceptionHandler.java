@@ -12,7 +12,6 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
     @ExceptionHandler({ValidationError.class})
     public ResponseEntity<ErrorResponse> handleConflictException(ValidationError error, WebRequest request) {
         return new ResponseEntity<>(new ErrorResponse(error.getCode(), error.getMessage()), HttpStatus.BAD_REQUEST);
