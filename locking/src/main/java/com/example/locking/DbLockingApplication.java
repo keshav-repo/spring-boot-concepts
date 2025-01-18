@@ -12,6 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +37,23 @@ public class DbLockingApplication implements CommandLineRunner {
         Product product = Product.builder().name("Iphone").price(100000).build();
         productRepository.save(product);
 
-        productService.updatePrice(product.getId(), 150000);
+        // Simulate concurrent access
+        Thread thread1 = new Thread(() -> productService.updatePrice(product.getId(), 150000, "Thread-1"));
+        Thread thread2 = new Thread(() -> productService.updatePrice(product.getId(), 200000, "Thread-2"));
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
     }
 }
 
 @Repository
 interface ProductRepository extends JpaRepository<Product, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<Product> findById(Long id);
+    @Query("SELECT p FROM Product p WHERE p.id = :id")
+    Optional<Product> findByIdWithLock(@Param("id") Long id);
 }
 
 @Service
@@ -51,11 +62,23 @@ class ProductService {
     private ProductRepository productRepository;
 
     @Transactional
-    public void updatePrice(Long id, double newPrice) {
-		Product product = productRepository
-				.findById(id)
-				.orElseThrow(EntityNotFoundException::new);
-		product.setPrice(newPrice);
+    public void updatePrice(Long id, double newPrice, String threadName) {
+        System.out.println(threadName + " attempting to fetch product with id: " + id);
+        Product product = productRepository
+                .findByIdWithLock(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        System.out.println(threadName + " locked product: " + product);
+
+        // Simulate some processing
+        try {
+            Thread.sleep(5000); // Simulate delay to hold the lock
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        product.setPrice(newPrice);
+        System.out.println(threadName + " updated price to: " + newPrice);
     }
 }
 
