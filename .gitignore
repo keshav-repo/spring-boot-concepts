@@ -6,3 +6,4 @@ spring-batch/rest-api/.mvn/wrapper/maven-wrapper.jar
 *.jar
 *.jar
 springboot-cassandra-docker/.mvn/wrapper/maven-wrapper.jar
+access.log

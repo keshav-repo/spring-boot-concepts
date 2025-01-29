@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Order-producer
+  main:
+    banner-mode: off
+    log-startup-info: false
+  jackson:
+    date-format: yyyy-MM-dd
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      client-id: spring-boot-kafka-producer

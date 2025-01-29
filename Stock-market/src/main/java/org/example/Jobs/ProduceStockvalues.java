@@ -25,7 +25,6 @@ public class ProduceStockvalues {
                 for (String cell : nextRecord) {
 
                 }
-            
             }
         }catch (Exception e){
             e.printStackTrace();
